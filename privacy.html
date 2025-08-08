@@ -1,0 +1,52 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — William's Gamebox</title>
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <img src="assets/logo.svg" alt="William's Gamebox logo" width="32" height="32" />
+      <span>William's Gamebox</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="about.html">About</a>
+      <a aria-current="page" href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <h1>Privacy Policy</h1>
+    <p><strong>Last updated:</strong> <span id="date"></span></p>
+
+    <h2>Child-Directed Service</h2>
+    <p>William's Gamebox is a <strong>child-directed website</strong> designed primarily for children under 13. We follow best practices to protect children's privacy. We do not require registration and we do not knowingly collect personal information from children.</p>
+
+    <h2>Information We Collect</h2>
+    <ul>
+      <li><strong>No account data:</strong> We do not create user accounts.</li>
+      <li><strong>No contact forms:</strong> We do not ask children to submit names, emails, or phone numbers.</li>
+      <li><strong>Limited analytics (optional):</strong> If analytics are enabled in the future, they will be configured to avoid collecting personal information and to respect child-directed settings.</li>
+    </ul>
+
+    <h2>Advertising</h2>
+    <p>We may display <strong>contextual ads</strong> (based on page content, not user behavior). If we use an ad network such as Google AdSense, we will ensure the site and ad requests are <strong>tagged for child-directed treatment</strong> and we will not use personalized advertising.</p>
+
+    <h2>Parental Rights</h2>
+    <p>Parents may contact us to review or delete any information that may have been inadvertently collected.</p>
+
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:contact@example.com">contact@example.com</a></p>
+  </main>
+  <footer class="site-footer"><small>© <span id="year"></span> William's Gamebox</small></footer>
+  <script>
+    const d = new Date();
+    document.getElementById('year').textContent = d.getFullYear();
+    document.getElementById('date').textContent = d.toLocaleDateString();
+  </script>
+</body>
+</html>

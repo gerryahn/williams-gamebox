@@ -1,0 +1,13 @@
+
+.board {
+  margin: 12px 0 10px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;
+}
+#equation { font-size: clamp(22px, 4vw, 30px); margin-bottom: 12px; font-weight: 800; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(80px, 1fr)); gap: 10px; }
+.tile { display: grid; place-items: center; height: 64px; border-radius: 10px; background: linear-gradient(180deg, rgba(147,197,253,.35), rgba(110,231,183,.25)); font-weight: 800; font-size: 20px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+.tile:focus { outline: 3px solid #93c5fd; }
+.tile.correct { background: linear-gradient(180deg, #6ee7b7, #93c5fd); color: #0b1227; }
+.tile.wrong { background: #ef4444; }
+.hud { display: flex; gap: 14px; align-items: center; }
+.howto { color: var(--muted); }
