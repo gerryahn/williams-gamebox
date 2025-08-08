@@ -4,219 +4,39 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Number Pop Game with Config and Overlay Game Over</title>
+<link rel="stylesheet" href="../../styles/style.css" />
+<link rel="stylesheet" href="game.css" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
-
-  body {
-    margin: 0;
-    background: linear-gradient(135deg, #a2d2ff, #f1f6f9);
-    font-family: 'Quicksand', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
-
-  #configToggle {
-    margin-top: 20px;
-    padding: 8px 20px;
-    font-size: 18px;
-    font-weight: 600;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
-    transition: background 0.3s ease, transform 0.15s ease;
-    z-index: 10;
-  }
-  #configToggle:hover {
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-    transform: scale(1.05);
-  }
-
-  #configPanel {
-    margin-top: 10px;
-    background: white;
-    padding: 16px 24px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    display: none;
-    width: 320px;
-    z-index: 10;
-  }
-
-  #configPanel label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #333;
-  }
-  #configPanel input {
-    width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 16px;
-    font-size: 18px;
-    border-radius: 12px;
-    border: 1.8px solid #cce4ff;
-    outline-offset: 2px;
-    transition: border-color 0.3s ease;
-  }
-  #configPanel input:focus {
-    border-color: #007bff;
-  }
-  #applyConfig {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
-    transition: background 0.3s ease, transform 0.15s ease;
-  }
-  #applyConfig:hover {
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-    transform: scale(1.05);
-  }
-
-  #gameContainer {
-    position: relative;
-    width: 800px;
-    margin-top: 20px;
-  }
-
-  canvas {
-    background: #ffffffcc;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    z-index: 5;
-    display: block;
-  }
-
-  #startButton {
-    margin-top: 20px;
-    padding: 12px 32px;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
-    transition: background 0.3s ease, transform 0.15s ease;
-    display: none;
-    z-index: 10;
-  }
-
-  #startButton:hover {
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-    transform: scale(1.05);
-  }
-
-  #scoreboard {
-    margin-top: 12px;
-    color: #333;
-    font-size: 22px;
-    font-weight: 600;
-    user-select: none;
-    z-index: 10;
-  }
-
-  /* Overlay styles */
-  #gameOverOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 36px;
-    font-weight: 700;
-    text-align: center;
-    z-index: 20;
-    display: none;
-  }
-
-  #gameOverOverlay button {
-    margin-top: 24px;
-    padding: 16px 48px;
-    font-size: 24px;
-    border: none;
-    border-radius: 36px;
-    background: #00aaff;
-    cursor: pointer;
-    color: white;
-    font-weight: 700;
-    box-shadow: 0 8px 20px #00aaffaa;
-    transition: background 0.3s ease, transform 0.15s ease;
-  }
-  #gameOverOverlay button:hover {
-    background: #0077cc;
-    transform: scale(1.05);
-  }
-
-  #hearNumberBtn {
-    position: absolute;
-    bottom: 20px;
-    left: 90%;
-    transform: translateX(-50%);
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 14px 24px;
-    font-size: 18px;
-    font-weight: 600;
-    box-shadow: 0 6px 14px rgba(0, 143, 255, 0.6);
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.15s ease;
-    z-index: 15;
-  }
-  #hearNumberBtn:hover {
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-    transform: translateX(-50%) scale(1.05);
-  }
 </style>
 </head>
 <body>
-  <button id="configToggle">Show Config</button>
-  <div id="configPanel">
-    <label for="minNumber">Min Number (≥ 0):</label>
-    <input type="number" id="minNumber" min="0" max="9999" value="100" />
-    <label for="maxNumber">Max Number (≤ 9999):</label>
-    <input type="number" id="maxNumber" min="0" max="9999" value="999" />
-    <button id="applyConfig">Apply</button>
-  </div>
+  <div id="header"></div>
+  <div class="game-page">
+    <button id="configToggle">Show Config</button>
+    <div id="configPanel">
+      <label for="minNumber">Min Number (≥ 0):</label>
+      <input type="number" id="minNumber" min="0" max="9999" value="100" />
+      <label for="maxNumber">Max Number (≤ 9999):</label>
+      <input type="number" id="maxNumber" min="0" max="9999" value="999" />
+      <button id="applyConfig">Apply</button>
+    </div>
 
-  <div id="scoreboard">Score: 0 | Lives: 3 | Highest Score: 0</div>
+    <div id="scoreboard">Score: 0 | Lives: 3 | Highest Score: 0</div>
 
-  <div id="gameContainer">
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <button id="hearNumberBtn" title="Hear the number again">Hear Number 🔊</button>
-  </div>
+    <div id="gameContainer">
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <button id="hearNumberBtn" title="Hear the number again">Hear Number 🔊</button>
+    </div>
 
-  <button id="startButton">Start</button>
+    <button id="startButton">Start</button>
 
-  <div id="gameOverOverlay">
-    <div id="gameOverText"></div>
-    <button id="overlayRestartBtn">Play Again</button>
-  </div>
+    <div id="gameOverOverlay">
+      <div id="gameOverText"></div>
+      <button id="overlayRestartBtn">Play Again</button>
+    </div>
 
-<script>
+    <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -457,6 +277,20 @@ hearNumberBtn.addEventListener('click', () => {
 
 // Initialize
 resetGame();
-</script>
+    </script>
+  </div>
+  <div id="footer"></div>
+  <script>
+    fetch('../../header.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('header').innerHTML = data);
+    fetch('../../footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer').innerHTML = data);
+    window.addEventListener('DOMContentLoaded', function() {
+      var yearSpan = document.getElementById('year');
+      if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,182 @@
+/* Scope all styles to .game-page */
+.game-page {
+    margin: 0;
+    background: linear-gradient(135deg, #a2d2ff, #f1f6f9);
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .game-page #configToggle {
+    margin-top: 20px;
+    padding: 8px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+    z-index: 10;
+  }
+  .game-page #configToggle:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  .game-page #configPanel {
+    margin-top: 10px;
+    background: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: none;
+    width: 320px;
+    z-index: 10;
+  }
+
+  .game-page #configPanel label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  .game-page #configPanel input {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 1.8px solid #cce4ff;
+    outline-offset: 2px;
+    transition: border-color 0.3s ease;
+  }
+  .game-page #configPanel input:focus {
+    border-color: #007bff;
+  }
+  .game-page #applyConfig {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+  }
+  .game-page #applyConfig:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  .game-page #gameContainer {
+    position: relative;
+    width: 800px;
+    margin-top: 20px;
+  }
+
+  .game-page canvas {
+    background: #ffffffcc;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 5;
+    display: block;
+  }
+
+  .game-page #startButton {
+    margin-top: 20px;
+    padding: 12px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+    display: none;
+    z-index: 10;
+  }
+
+  .game-page #startButton:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  .game-page #scoreboard {
+    margin-top: 12px;
+    color: #333;
+    font-size: 22px;
+    font-weight: 600;
+    user-select: none;
+    z-index: 10;
+  }
+
+  /* Overlay styles */
+  .game-page #gameOverOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    z-index: 20;
+    display: none;
+  }
+
+  .game-page #gameOverOverlay button {
+    margin-top: 24px;
+    padding: 16px 48px;
+    font-size: 24px;
+    border: none;
+    border-radius: 36px;
+    background: #00aaff;
+    cursor: pointer;
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 8px 20px #00aaffaa;
+    transition: background 0.3s ease, transform 0.15s ease;
+  }
+  .game-page #gameOverOverlay button:hover {
+    background: #0077cc;
+    transform: scale(1.05);
+  }
+
+  .game-page #hearNumberBtn {
+    position: absolute;
+    bottom: 20px;
+    left: 90%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 6px 14px rgba(0, 143, 255, 0.6);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.15s ease;
+    z-index: 15;
+  }
+  .game-page #hearNumberBtn:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: translateX(-50%) scale(1.05);
+  }
