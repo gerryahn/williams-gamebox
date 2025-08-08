@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Number Pop Game with Config and Overlay Game Over</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #a2d2ff, #f1f6f9);
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #configToggle {
+    margin-top: 20px;
+    padding: 8px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+    z-index: 10;
+  }
+  #configToggle:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  #configPanel {
+    margin-top: 10px;
+    background: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: none;
+    width: 320px;
+    z-index: 10;
+  }
+
+  #configPanel label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  #configPanel input {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 1.8px solid #cce4ff;
+    outline-offset: 2px;
+    transition: border-color 0.3s ease;
+  }
+  #configPanel input:focus {
+    border-color: #007bff;
+  }
+  #applyConfig {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+  }
+  #applyConfig:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  #gameContainer {
+    position: relative;
+    width: 800px;
+    margin-top: 20px;
+  }
+
+  canvas {
+    background: #ffffffcc;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 5;
+    display: block;
+  }
+
+  #startButton {
+    margin-top: 20px;
+    padding: 12px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 143, 255, 0.5);
+    transition: background 0.3s ease, transform 0.15s ease;
+    display: none;
+    z-index: 10;
+  }
+
+  #startButton:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: scale(1.05);
+  }
+
+  #scoreboard {
+    margin-top: 12px;
+    color: #333;
+    font-size: 22px;
+    font-weight: 600;
+    user-select: none;
+    z-index: 10;
+  }
+
+  /* Overlay styles */
+  #gameOverOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    z-index: 20;
+    display: none;
+  }
+
+  #gameOverOverlay button {
+    margin-top: 24px;
+    padding: 16px 48px;
+    font-size: 24px;
+    border: none;
+    border-radius: 36px;
+    background: #00aaff;
+    cursor: pointer;
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 8px 20px #00aaffaa;
+    transition: background 0.3s ease, transform 0.15s ease;
+  }
+  #gameOverOverlay button:hover {
+    background: #0077cc;
+    transform: scale(1.05);
+  }
+
+  #hearNumberBtn {
+    position: absolute;
+    bottom: 20px;
+    left: 90%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 6px 14px rgba(0, 143, 255, 0.6);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.15s ease;
+    z-index: 15;
+  }
+  #hearNumberBtn:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: translateX(-50%) scale(1.05);
+  }
+</style>
+</head>
+<body>
+  <button id="configToggle">Show Config</button>
+  <div id="configPanel">
+    <label for="minNumber">Min Number (≥ 0):</label>
+    <input type="number" id="minNumber" min="0" max="9999" value="100" />
+    <label for="maxNumber">Max Number (≤ 9999):</label>
+    <input type="number" id="maxNumber" min="0" max="9999" value="999" />
+    <button id="applyConfig">Apply</button>
+  </div>
+
+  <div id="scoreboard">Score: 0 | Lives: 3 | Highest Score: 0</div>
+
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <button id="hearNumberBtn" title="Hear the number again">Hear Number 🔊</button>
+  </div>
+
+  <button id="startButton">Start</button>
+
+  <div id="gameOverOverlay">
+    <div id="gameOverText"></div>
+    <button id="overlayRestartBtn">Play Again</button>
+  </div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const startButton = document.getElementById('startButton');
+const scoreboard = document.getElementById('scoreboard');
+const configToggle = document.getElementById('configToggle');
+const configPanel = document.getElementById('configPanel');
+const minInput = document.getElementById('minNumber');
+const maxInput = document.getElementById('maxNumber');
+const applyConfig = document.getElementById('applyConfig');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
+const gameOverText = document.getElementById('gameOverText');
+const overlayRestartBtn = document.getElementById('overlayRestartBtn');
+const hearNumberBtn = document.getElementById('hearNumberBtn');
+
+let bubbles = [];
+let targetNumber = 0;
+let score = 0;
+let lives = 3;
+let highestScore = 0;
+let cannon = { x: canvas.width / 2, y: canvas.height - 60, angle: 0 };
+let projectiles = [];
+let gameRunning = false;
+
+let minNumber = 100;
+let maxNumber = 999;
+
+configToggle.addEventListener('click', () => {
+  if (configPanel.style.display === 'none' || configPanel.style.display === '') {
+    configPanel.style.display = 'block';
+    configToggle.textContent = 'Hide Config';
+  } else {
+    configPanel.style.display = 'none';
+    configToggle.textContent = 'Show Config';
+  }
+});
+
+applyConfig.addEventListener('click', () => {
+  const minVal = parseInt(minInput.value);
+  const maxVal = parseInt(maxInput.value);
+  if (isNaN(minVal) || isNaN(maxVal)) {
+    alert('Please enter valid numbers.');
+    return;
+  }
+  if (minVal < 0 || maxVal > 9999 || minVal >= maxVal) {
+    alert('Ensure 0 ≤ Min Number < Max Number ≤ 9999.');
+    return;
+  }
+  minNumber = minVal;
+  maxNumber = maxVal;
+  resetGame();
+});
+
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function newRound() {
+  targetNumber = getRandomNumber(minNumber, maxNumber);
+  let options = [targetNumber];
+  while (options.length < 3) {
+    let wrong = getRandomNumber(minNumber, maxNumber);
+    if (!options.includes(wrong)) options.push(wrong);
+  }
+  options.sort(() => Math.random() - 0.5);
+  bubbles = options.map((num, i) => ({
+    x: 200 + i * 200,
+    baseY: 150,
+    y: 150,
+    radius: 48,
+    number: num
+  }));
+  speakNumber(targetNumber);
+  updateScoreboard();
+}
+
+function speakNumber(num) {
+  if ('speechSynthesis' in window) {
+    let utter = new SpeechSynthesisUtterance(num.toString());
+    speechSynthesis.speak(utter);
+  }
+}
+
+canvas.addEventListener('click', e => {
+  if (!gameRunning) return;
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  const dx = mouseX - cannon.x;
+  const dy = mouseY - cannon.y;
+  cannon.angle = Math.atan2(dy, dx);
+  projectiles.push({
+    x: cannon.x,
+    y: cannon.y,
+    dx: Math.cos(cannon.angle) * 7,
+    dy: Math.sin(cannon.angle) * 7
+  });
+});
+
+function update() {
+  bubbles.forEach(b => {
+    b.y = b.baseY + Math.sin(Date.now() / 300 + b.x / 50) * 6;
+  });
+
+  projectiles.forEach((p, i) => {
+    p.x += p.dx;
+    p.y += p.dy;
+    for (let j = 0; j < bubbles.length; j++) {
+      let b = bubbles[j];
+      let dist = Math.hypot(p.x - b.x, p.y - b.y);
+      if (dist < b.radius) {
+        if (b.number === targetNumber) {
+          score++;
+          if (score > highestScore) highestScore = score;
+        } else {
+          lives--;
+          if (lives <= 0) {
+            gameOver();
+            return;
+          }
+        }
+        newRound();
+        projectiles.splice(i, 1);
+        return;
+      }
+    }
+    if (p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
+      projectiles.splice(i, 1);
+    }
+  });
+
+  updateScoreboard();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw bubbles
+  ctx.font = '28px Quicksand, Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const b of bubbles) {
+    ctx.beginPath();
+    ctx.fillStyle = '#ffcc66';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 4;
+    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#000';
+    ctx.fillText(b.number, b.x, b.y);
+  }
+
+  // Draw cannon base
+  ctx.save();
+  ctx.translate(cannon.x, cannon.y);
+  ctx.fillStyle = '#444';
+  ctx.shadowColor = 'rgba(0,0,0,0.2)';
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetY = 4;
+  ctx.beginPath();
+  ctx.arc(0, 0, 25, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Draw cannon barrel
+  ctx.rotate(cannon.angle);
+  ctx.fillStyle = '#222';
+  ctx.fillRect(0, -10, 60, 20);
+  ctx.restore();
+
+  // Draw projectiles
+  ctx.fillStyle = 'red';
+  projectiles.forEach(p => {
+    ctx.beginPath();
+    ctx.shadowColor = 'rgba(255,0,0,0.5)';
+    ctx.shadowBlur = 12;
+    ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  });
+}
+
+function gameLoop() {
+  if (!gameRunning) return;
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+function updateScoreboard() {
+  scoreboard.textContent = `Score: ${score} | Lives: ${lives} | Highest Score: ${highestScore}`;
+}
+
+function resetGame() {
+  score = 0;
+  lives = 3;
+  projectiles = [];
+  gameRunning = false;
+  startButton.style.display = 'inline-block';
+  gameOverOverlay.style.display = 'none';
+  updateScoreboard();
+  draw();
+}
+
+function startGame() {
+  if (gameRunning) return;
+  score = 0;
+  lives = 3;
+  projectiles = [];
+  gameRunning = true;
+  startButton.style.display = 'none';
+  gameOverOverlay.style.display = 'none';
+  newRound();
+  gameLoop();
+}
+
+function gameOver() {
+  gameRunning = false;
+  gameOverText.textContent = `Game Over!\nYour Score: ${score}`;
+  gameOverOverlay.style.display = 'flex';
+  startButton.style.display = 'none';
+}
+
+startButton.addEventListener('click', () => {
+  startGame();
+});
+
+overlayRestartBtn.addEventListener('click', () => {
+  startGame();
+});
+
+hearNumberBtn.addEventListener('click', () => {
+  if (gameRunning) {
+    speakNumber(targetNumber);
+  }
+});
+
+// Initialize
+resetGame();
+</script>
+</body>
+</html>
