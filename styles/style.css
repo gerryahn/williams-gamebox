@@ -8,6 +8,63 @@
   --text-secondary: #4a4a8a;
   --accent-primary: #4facfe;
   --accent-secondary: #00f2fe;
+  
+  /* Additional colors */
+  --success: #4ade80;
+  --error: #ff6b6b;
+  --neutral: #f1f5f9;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+}
+}
+
+.hero {
+  text-align: center;
+  padding: var(--space-lg) 0;
+}
+
+.hero-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 0 auto var(--space-xl);
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--space-md) 0;
+  }
+  
+  .hero-image {
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: var(--space-sm) 0;
+  }
+  
+  .hero-image {
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
   --success: #4ade80;
   --error: #ff6b6b;
   --neutral: #f1f5f9;
