@@ -8,17 +8,7 @@
   <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="/">
-      <img src="assets/logo.svg" alt="William's Gamebox logo" width="32" height="32" />
-      <span>William's Gamebox</span>
-    </a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="/">Home</a>
-      <a href="about.html">About</a>
-      <a aria-current="page" href="privacy.html">Privacy</a>
-    </nav>
-  </header>
+  <div id="header"></div>
   <main class="wrap">
     <h1>Privacy Policy</h1>
     <p><strong>Last updated:</strong> <span id="date"></span></p>
@@ -42,10 +32,15 @@
     <h2>Contact</h2>
     <p>Email: <a href="mailto:contact@example.com">contact@example.com</a></p>
   </main>
-  <footer class="site-footer"><small>© <span id="year"></span> William's Gamebox</small></footer>
+  <div id="footer"></div>
   <script>
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('header').innerHTML = data);
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer').innerHTML = data);
     const d = new Date();
-    document.getElementById('year').textContent = d.getFullYear();
     document.getElementById('date').textContent = d.toLocaleDateString();
   </script>
 </body>
