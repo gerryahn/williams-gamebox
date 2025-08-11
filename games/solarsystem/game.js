@@ -3,7 +3,6 @@
   const ctx = canvas.getContext('2d');
   const infoBox = document.getElementById('infoBox');
   const pauseBtn = document.getElementById('pauseBtn');
-  const legend = document.getElementById('legend');
 
   function resize() {
     canvas.width = canvas.clientWidth;
@@ -62,23 +61,79 @@
     ], factIndex: 0 },
   ];
 
-  // Generate legend content
+  // Generate legend content if legend element exists
+  function drawMiniPlanet(ctx, planet, x, y, size) {
+    ctx.save();
+    
+    // Draw the planet
+    ctx.beginPath();
+    if (planet.name === 'Mars') {
+      const grad = ctx.createRadialGradient(x - size/3, y - size/3, size/5, x, y, size);
+      grad.addColorStop(0, '#ff6666');
+      grad.addColorStop(1, planet.color);
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = planet.color;
+    }
+    ctx.shadowColor = planet.color;
+    ctx.shadowBlur = 6;
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Saturn's rings if it's Saturn
+    if (planet.name === 'Saturn') {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(210, 180, 140, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.ellipse(x, y, size * 1.8, size * 0.7, Math.PI/6, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Draw Earth's atmosphere if it's Earth
+    if (planet.name === 'Earth') {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = 'rgba(100, 150, 255, 0.7)';
+      ctx.shadowBlur = 5;
+      ctx.arc(x, y, size + 2, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
   function createLegend() {
+    const legend = document.getElementById('legend');
+    if (!legend) return;  // Skip if legend element doesn't exist
+    
+    const legendItems = document.createElement('div');
+    legendItems.className = 'legend-items';
+    legend.appendChild(legendItems);
+    
     planets.forEach(p => {
       const item = document.createElement('div');
       item.className = 'legend-item';
-      const colorDot = document.createElement('div');
-      colorDot.className = 'legend-color';
-      colorDot.style.backgroundColor = p.color;
-      colorDot.style.boxShadow = `0 0 10px 2px ${p.color}`;
-      item.appendChild(colorDot);
+      
+      // Create a canvas for each planet
+      const canvas = document.createElement('canvas');
+      canvas.width = 40;  // Larger canvas for better resolution
+      canvas.height = 40;
+      canvas.className = 'legend-planet';
+      const ctx = canvas.getContext('2d');
+      
+      // Draw the planet in the center of the canvas
+      drawMiniPlanet(ctx, p, canvas.width/2, canvas.height/2, 8);
+      
+      item.appendChild(canvas);
       const label = document.createElement('span');
       label.textContent = p.name;
       item.appendChild(label);
-      legend.appendChild(item);
+      legendItems.appendChild(item);
     });
   }
 
+  // Try to create legend, but won't break if element doesn't exist
   createLegend();
 
   const centerX = () => canvas.width / 2;

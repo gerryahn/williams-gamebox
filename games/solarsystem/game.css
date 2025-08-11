@@ -1,17 +1,20 @@
-body {
-  margin: 0;
+#gameContainer {
+  position: relative;
   background: #000;
   color: #eee;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
   display: flex;
-  height: 100vh;
+  height: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
 }
+
 #container {
   flex: 1;
   position: relative;
 }
-canvas {
+
+#solarCanvas {
   display: block;
   background: radial-gradient(circle at center, #111 40%, #000 100%);
   width: 100%;
@@ -43,30 +46,49 @@ canvas {
   line-height: 1.4;
 }
 #legend {
-  width: 220px;
-  background: #111;
-  padding: 15px 20px;
-  box-sizing: border-box;
-  border-left: 2px solid #333;
-  overflow-y: auto;
+  background: var(--surface-2);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
 }
+
 #legend h2 {
-  margin-top: 0;
+  margin: 0 0 0.75rem 0;
+  font-size: 1.2em;
   font-weight: 700;
-  border-bottom: 1px solid #444;
-  padding-bottom: 8px;
+  color: var(--text-1);
+  text-align: center;
 }
+
+.legend-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 .legend-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 0.5rem;
+  padding: 0.25rem;
 }
-.legend-color {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  margin-right: 12px;
-  box-shadow: 0 0 8px 1px currentColor;
+
+.legend-planet {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.2s ease;
+}
+
+.legend-item:hover .legend-planet {
+  transform: scale(1.15);
+}
+
+.legend-item span {
+  font-size: 0.9em;
+  color: var(--text-1);
+  white-space: nowrap;
 }
 #controls {
   position: absolute;
@@ -74,17 +96,8 @@ canvas {
   left: 15px;
   z-index: 20;
 }
-#pauseBtn {
-  background: #222;
-  border: 1px solid #666;
-  color: #eee;
-  padding: 8px 14px;
-  font-size: 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.3s;
-}
+
+/* Using the site's button styles instead of custom ones */
 #pauseBtn:hover {
-  background: #444;
+  opacity: 0.9;
 }

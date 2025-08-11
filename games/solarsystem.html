@@ -1,26 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Solar System with Legend & Controls</title>
-<link rel="stylesheet" href="solarsystem/game.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solar System — William's Gamebox</title>
+  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="solarsystem/game.css" />
 </head>
 <body>
+  <div id="header"></div>
 
-<div id="container">
-  <canvas id="solarCanvas"></canvas>
-  <div id="infoBox"></div>
-  <div id="controls">
-    <button id="pauseBtn">Pause</button>
-  </div>
-</div>
+  <main class="game-wrap">
+    <div class="game-header">
+      <h1>Solar System</h1>
+      <div class="hud">
+        <div class="game-controls">
+          <button id="pauseBtn" class="btn btn-primary">Pause</button>
+        </div>
+      </div>
+    </div>
 
-<div id="legend">
-  <h2>Planets Legend</h2>
-  <!-- legend items injected here -->
-</div>
+    <!-- Ad placeholder above the game -->
+    <section class="ad" aria-label="Advertisement">
+      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
+    </section>
 
-<script src="solarsystem/game.js"></script>
+    <div id="gameContainer" class="game-board">
+      <div id="container">
+        <canvas id="solarCanvas"></canvas>
+        <div id="infoBox"></div>
+      </div>
+    </div>
+
+    <!-- Ad placeholder below the game -->
+    <section class="ad" aria-label="Advertisement">
+      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
+    </section>
+
+    <section id="legend" class="game-info">
+      <h2>Meet Our Space Family! 🌎 ✨</h2>
+      <div class="legend-items">
+        <!-- legend items injected here -->
+      </div>
+    </section>
+
+    <section class="howto">
+      <h2>How to Play</h2>
+      <p>Explore our interactive Solar System! Click and drag planets to move them, and click on any planet or the Sun to learn interesting facts.</p>
+      <ul>
+        <li><span class="kbd">Click</span> and drag to move planets</li>
+        <li><span class="kbd">Click</span> on a planet to see its facts</li>
+        <li>Use <span class="kbd">Pause</span> to stop planet movement</li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="solarsystem/game.js"></script>
+  <script>
+    fetch('../header.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('header').innerHTML = data);
+    fetch('../footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer').innerHTML = data);
+    window.addEventListener('DOMContentLoaded', function() {
+      var yearSpan = document.getElementById('year');
+      if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    });
+  </script>
 </body>
 </html>
