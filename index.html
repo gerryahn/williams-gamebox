@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/activities.css" />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
 </head>
 <body>
@@ -26,12 +27,15 @@
       <!-- Insert your ad code here. See ads/adsense-placeholder.html for instructions. -->
     </section>
 
-    <section class="games-grid" aria-labelledby="games-heading">
-      <h2 id="games-heading">Play a Game</h2>
+    <section class="activities-grid">
+      <div class="section-header">
+        <h2 id="math-games-heading">Math Games</h2>
+        <p class="section-desc">Quick and fun games to practice math skills!</p>
+      </div>
       <ul class="grid">
         <li class="card">
           <a href="games/math-match.html" class="card-link" aria-describedby="g1-desc">
-            <div class="thumb thumb-math" aria-hidden="true">➗</div>
+            <div class="thumb thumb-math" aria-hidden="true">➕➖</div>
             <h3>Math Match</h3>
             <p id="g1-desc">Quick arithmetic practice (addition & subtraction) with friendly difficulty.</p>
           </a>
@@ -41,6 +45,20 @@
             <div class="thumb thumb-math" aria-hidden="true">🎯</div>
             <h3>Number Pop</h3>
             <p id="g2-desc">Fun number recognition game with voice commands. Aim and pop the correct number bubbles!</p>
+          </a>
+        </li>
+      </ul>
+
+      <div class="section-header">
+        <h2 id="interactive-learning-heading">Interactive Learning</h2>
+        <p class="section-desc">Explore and learn through interactive experiences!</p>
+      </div>
+      <ul class="grid">
+        <li class="card feature-card">
+          <a href="games/solarsystem.html" class="card-link" aria-describedby="s1-desc">
+            <div class="thumb thumb-science" aria-hidden="true">🚀</div>
+            <h3>Space Explorer: Our Solar Family</h3>
+            <p id="s1-desc">Take an interactive journey through our Solar System! Learn amazing facts about planets while watching them orbit the Sun.</p>
           </a>
         </li>
       </ul>

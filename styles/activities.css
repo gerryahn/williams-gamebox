@@ -1,0 +1,38 @@
+/* Activity Grid Styles */
+.activities-grid {
+  margin: var(--space-xl) 0;
+}
+
+.section-header {
+  text-align: center;
+  margin: var(--space-xl) 0 var(--space-lg);
+}
+
+.section-header h2 {
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  font-size: 1.75rem;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--bg-secondary), #f0f7ff);
+  border: 2px solid rgba(79, 172, 254, 0.1);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+}
+
+.thumb-science {
+  background: linear-gradient(135deg, #4158D0, #C850C0);
+}

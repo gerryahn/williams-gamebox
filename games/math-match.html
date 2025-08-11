@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Math Match — William's Gamebox</title>
   <link rel="stylesheet" href="../styles/style.css" />
-  <link rel="stylesheet" href="math-match/game.css" />
+  <link rel="stylesheet" href="../styles/math-match.css" />
 </head>
 <body>
   <div id="header"></div>
@@ -25,7 +25,13 @@
       <!-- Insert ad code here (see ../../ads/adsense-placeholder.html). -->
     </section>
 
-    <div id="game" class="board" aria-live="polite"></div>
+    <div id="game" class="board" aria-live="polite">
+      <div id="placeholder" class="game-placeholder">
+        <h3>Ready to Play?</h3>
+        <p>Press <kbd>Enter</kbd> or click Start to begin!</p>
+        <p class="emoji">🎮</p>
+      </div>
+    </div>
 
     <!-- Ad placeholder below the game -->
     <section class="ad" aria-label="Advertisement">
@@ -43,7 +49,7 @@
   </main>
 
   <div id="footer"></div>
-  <script src="math-match/game.js" defer></script>
+  <script src="../scripts/math-match.js" defer></script>
   <script>
     fetch('../header.html')
       .then(response => response.text())

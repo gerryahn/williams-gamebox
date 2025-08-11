@@ -1,9 +1,11 @@
-
 (function(){
   const board = document.getElementById('game');
   const scoreEl = document.getElementById('score');
   const timeEl = document.getElementById('time');
   const btn = document.getElementById('btnStart');
+
+  // Show placeholder on initial load
+  showPlaceholder();
 
   let score = 0, time = 60, timer = null, currentAnswer = null;
 
@@ -60,16 +62,38 @@
     setTimeout(()=> el.classList.remove(cls), 250);
   }
 
+  function showPlaceholder() {
+    board.innerHTML = `
+      <div id="placeholder" class="game-placeholder">
+        <h3>Ready to Play?</h3>
+        <p>Press <kbd>Enter</kbd> or click Start to begin!</p>
+        <p class="emoji">🎮</p>
+      </div>
+    `;
+  }
+
   function start(){
     if (timer) return;
-    score = 0; time = 60; scoreEl.textContent = '0'; timeEl.textContent = '60';
+    score = 0; 
+    time = 60; 
+    scoreEl.textContent = '0'; 
+    timeEl.textContent = '60';
     newRound();
     timer = setInterval(()=>{
-      time -= 1; timeEl.textContent = time;
-      if (time<=0){ stop(); alert(`Time! Your score: ${score}`); }
+      time -= 1; 
+      timeEl.textContent = time;
+      if (time<=0){ 
+        stop(); 
+        alert(`Time! Your score: ${score}`);
+        showPlaceholder();
+      }
     }, 1000);
   }
-  function stop(){ clearInterval(timer); timer = null; }
+
+  function stop(){ 
+    clearInterval(timer); 
+    timer = null; 
+  }
 
   btn.addEventListener('click', start);
 
