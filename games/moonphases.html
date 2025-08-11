@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Moon Phases for Kids</title>
+<style>
+  body {
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin: 0;
+    background: #00111a;
+    color: white;
+  }
+  canvas {
+    background: #000;
+    display: block;
+    margin: auto;
+    touch-action: none;
+  }
+  #phaseName {
+    font-size: 1.5em;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<h1>Moon Phases</h1>
+<canvas id="moonCanvas"></canvas>
+<div id="phaseName"></div>
+
+<script>
+const canvas = document.getElementById('moonCanvas');
+const ctx = canvas.getContext('2d');
+let width, height, centerX, centerY, scale;
+
+let moonAngle = 0; // Radians
+let dragging = false;
+
+const phases = [
+  { name: 'New Moon', angle: 0 },
+  { name: 'Waxing Crescent', angle: Math.PI / 4 },
+  { name: 'First Quarter', angle: Math.PI / 2 },
+  { name: 'Waxing Gibbous', angle: 3 * Math.PI / 4 },
+  { name: 'Full Moon', angle: Math.PI },
+  { name: 'Waning Gibbous', angle: 5 * Math.PI / 4 },
+  { name: 'Last Quarter', angle: 3 * Math.PI / 2 },
+  { name: 'Waning Crescent', angle: 7 * Math.PI / 4 }
+];
+
+function resizeCanvas() {
+  width = window.innerWidth * 0.9;
+  if (width > 800) width = 800;
+  height = width * 0.6;
+  canvas.width = width;
+  canvas.height = height;
+  centerX = width / 2;
+  centerY = height / 2;
+  scale = width / 8;
+  drawScene();
+}
+
+function drawScene() {
+  ctx.clearRect(0, 0, width, height);
+
+  // Draw Sun
+  ctx.beginPath();
+  ctx.arc(centerX - scale * 3, centerY, scale, 0, Math.PI * 2);
+  ctx.fillStyle = 'yellow';
+  ctx.fill();
+
+  // Draw Earth
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, scale * 0.5, 0, Math.PI * 2);
+  ctx.fillStyle = 'blue';
+  ctx.fill();
+
+  // Orbit
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, scale * 2, 0, Math.PI * 2);
+  ctx.strokeStyle = '#555';
+  ctx.stroke();
+
+  // Moon position
+  const moonX = centerX + Math.cos(moonAngle) * scale * 2;
+  const moonY = centerY + Math.sin(moonAngle) * scale * 2;
+
+  // Moon phase shading
+  const phaseFraction = (Math.cos(moonAngle) + 1) / 2;
+
+  ctx.beginPath();
+  ctx.arc(moonX, moonY, scale * 0.3, 0, Math.PI * 2);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(moonX, moonY, scale * 0.3, 0, Math.PI * 2);
+  ctx.fillStyle = 'black';
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.arc(moonX + (phaseFraction - 0.5) * scale * 0.6, moonY, scale * 0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Show phase name
+  document.getElementById('phaseName').textContent = getClosestPhase().name;
+}
+
+function getClosestPhase() {
+  let minDiff = Infinity;
+  let closest = phases[0];
+  for (const p of phases) {
+    let diff = Math.abs(((moonAngle - p.angle + Math.PI * 2) % (Math.PI * 2)) - Math.PI);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = p;
+    }
+  }
+  return closest;
+}
+
+canvas.addEventListener('mousedown', e => { dragging = true; updateAngle(e); });
+canvas.addEventListener('mousemove', e => { if (dragging) updateAngle(e); });
+canvas.addEventListener('mouseup', () => dragging = false);
+canvas.addEventListener('touchstart', e => { dragging = true; updateAngle(e.touches[0]); });
+canvas.addEventListener('touchmove', e => { if (dragging) updateAngle(e.touches[0]); });
+canvas.addEventListener('touchend', () => dragging = false);
+
+function updateAngle(e) {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left - centerX;
+  const y = e.clientY - rect.top - centerY;
+  moonAngle = Math.atan2(y, x);
+  drawScene();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+</script>
+</body>
+</html>

@@ -1,147 +1,78 @@
 (() => {
+  // Get DOM elements
   const canvas = document.getElementById('solarCanvas');
   const ctx = canvas.getContext('2d');
   const infoBox = document.getElementById('infoBox');
   const pauseBtn = document.getElementById('pauseBtn');
 
-  function resize() {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+  // Game state
+  const state = {
+    lastTime: 0,
+    draggingPlanet: null,
+    paused: false,
+    isDragging: false,
+    dragStartAngle: 0,
+    dragStartMouseAngle: 0
+  };
 
+  // Define initial object properties
   const sun = {
     name: 'Sun',
     radius: 30,
     color: 'yellow',
-    facts: ['The Sun is a star at the center of our solar system.']
+    facts: ['The Sun is like a giant ball of fire that gives us light and keeps us warm!']
   };
 
   const planets = [
-    { name: 'Mercury', a: 70, e: 0.6, size: 6, color: '#a9a9a9', angle: 0, baseSpeed: 4.15, orbitRotation: 45, facts: [
-      'Mercury is the closest planet to the Sun.',
-      'Mercury has a very thin atmosphere.',
-      'A day on Mercury lasts about 59 Earth days.'
+    { name: 'Mercury', a: 80, e: 0.4, size: 5, color: '#a9a9a9', angle: 0, baseSpeed: 4.15, orbitRotation: 45, facts: [
+      'Mercury is the smallest planet!',
+      'It\'s the closest planet to the Sun, so it\'s very hot!',
+      'You could jump really high on Mercury because it\'s so small!'
     ], factIndex: 0 },
-    { name: 'Venus', a: 100, e: 0.3, size: 10, color: '#e6ccb2', angle: 0, baseSpeed: 1.62, orbitRotation: 15, facts: [
-      'Venus is the hottest planet in the solar system.',
-      'Venus rotates in the opposite direction to most planets.',
-      'Venus is sometimes called Earth’s sister planet.'
+    { name: 'Venus', a: 120, e: 0.3, size: 10, color: '#e6ccb2', angle: 0, baseSpeed: 1.62, orbitRotation: 15, facts: [
+      'Venus is the brightest planet in our night sky!',
+      'It spins backward compared to other planets - how silly!',
+      'Venus is about the same size as Earth!'
     ], factIndex: 0 },
-    { name: 'Earth', a: 140, e: 0.2, size: 11, color: '#2a6df4', angle: 0, baseSpeed: 1.0, orbitRotation: 60, facts: [
-      'Earth is the only planet known to support life.',
-      'Earth has one natural satellite, the Moon.',
-      'About 71% of Earth’s surface is water.'
+    { name: 'Earth', a: 160, e: 0.2, size: 11, color: '#2a6df4', angle: 0, baseSpeed: 1.0, orbitRotation: 60, facts: [
+      'Earth is our home planet - it\'s where we all live!',
+      'Earth has one moon that lights up our night sky!',
+      'Earth is covered in big oceans and green forests!'
     ], factIndex: 0 },
-    { name: 'Mars', a: 180, e: 0.4, size: 8, color: '#d14b2f', angle: 0, baseSpeed: 0.53, orbitRotation: 120, facts: [
-      'Mars is called the Red Planet due to iron oxide on its surface.',
-      'Mars has the tallest volcano in the solar system.',
-      'Mars is the 4th planet from the Sun.'
+    { name: 'Mars', a: 200, e: 0.4, size: 8, color: '#d14b2f', angle: 0, baseSpeed: 0.53, orbitRotation: 120, facts: [
+      'Mars is called the Red Planet because it looks red!',
+      'Mars has big mountains and deep valleys!',
+      'Mars has two tiny moons - that\'s twice as many as Earth!'
     ], factIndex: 0 },
-    { name: 'Jupiter', a: 240, e: 0.1, size: 20, color: '#c18a59', angle: 0, baseSpeed: 0.08, orbitRotation: 25, facts: [
-      'Jupiter is the largest planet in the solar system.',
-      'Jupiter has a giant red storm called the Great Red Spot.',
-      'Jupiter has over 79 moons.'
+    { name: 'Jupiter', a: 260, e: 0.1, size: 20, color: '#c18a59', angle: 0, baseSpeed: 0.08, orbitRotation: 25, facts: [
+      'Jupiter is the biggest planet - it\'s huge!',
+      'It has a big red spot that\'s like a giant storm!',
+      'Jupiter has lots and lots of moons!'
     ], factIndex: 0 },
-    { name: 'Saturn', a: 300, e: 0.15, size: 18, color: '#d9c185', angle: 0, baseSpeed: 0.034, orbitRotation: 80, facts: [
-      'Saturn is famous for its extensive ring system.',
-      'Saturn is the second largest planet.',
-      'Saturn’s rings are mostly made of ice particles.'
+    { name: 'Saturn', a: 320, e: 0.15, size: 18, color: '#d9c185', angle: 0, baseSpeed: 0.034, orbitRotation: 80, facts: [
+      'Saturn has beautiful rings around it!',
+      'The rings are made of ice and rock - like a space necklace!',
+      'Saturn is so light it could float in a giant bathtub!'
     ], factIndex: 0 },
-    { name: 'Uranus', a: 360, e: 0.12, size: 15, color: '#82d6e3', angle: 0, baseSpeed: 0.012, orbitRotation: 30, facts: [
-      'Uranus rotates on its side.',
-      'Uranus has a faint ring system.',
-      'Uranus is often called an ice giant.'
+    { name: 'Uranus', a: 380, e: 0.12, size: 15, color: '#82d6e3', angle: 0, baseSpeed: 0.012, orbitRotation: 30, facts: [
+      'Uranus rolls like a ball as it moves around the Sun!',
+      'It\'s a pretty blue-green color!',
+      'It\'s very cold on Uranus - like a giant ice ball!'
     ], factIndex: 0 },
-    { name: 'Neptune', a: 410, e: 0.05, size: 15, color: '#3355cc', angle: 0, baseSpeed: 0.006, orbitRotation: 70, facts: [
-      'Neptune is the farthest planet from the Sun.',
-      'Neptune has the strongest winds in the solar system.',
-      'Neptune was discovered through mathematical prediction.'
-    ], factIndex: 0 },
+    { name: 'Neptune', a: 440, e: 0.05, size: 15, color: '#3355cc', angle: 0, baseSpeed: 0.006, orbitRotation: 70, facts: [
+      'Neptune is the last planet in our solar system!',
+      'It\'s a beautiful bright blue color!',
+      'Neptune has super strong winds - like the biggest hurricane ever!'
+    ], factIndex: 0 }
   ];
 
-  // Generate legend content if legend element exists
-  function drawMiniPlanet(ctx, planet, x, y, size) {
-    ctx.save();
-    
-    // Draw the planet
-    ctx.beginPath();
-    if (planet.name === 'Mars') {
-      const grad = ctx.createRadialGradient(x - size/3, y - size/3, size/5, x, y, size);
-      grad.addColorStop(0, '#ff6666');
-      grad.addColorStop(1, planet.color);
-      ctx.fillStyle = grad;
-    } else {
-      ctx.fillStyle = planet.color;
-    }
-    ctx.shadowColor = planet.color;
-    ctx.shadowBlur = 6;
-    ctx.arc(x, y, size, 0, Math.PI * 2);
-    ctx.fill();
+  // Store original sizes for scaling
+  const originalSizes = {
+    sun: { radius: sun.radius },
+    planets: planets.map(p => ({ size: p.size, a: p.a }))
+  };
 
-    // Draw Saturn's rings if it's Saturn
-    if (planet.name === 'Saturn') {
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(210, 180, 140, 0.6)';
-      ctx.lineWidth = 2;
-      ctx.ellipse(x, y, size * 1.8, size * 0.7, Math.PI/6, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Draw Earth's atmosphere if it's Earth
-    if (planet.name === 'Earth') {
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)';
-      ctx.lineWidth = 2;
-      ctx.shadowColor = 'rgba(100, 150, 255, 0.7)';
-      ctx.shadowBlur = 5;
-      ctx.arc(x, y, size + 2, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    ctx.restore();
-  }
-
-  function createLegend() {
-    const legend = document.getElementById('legend');
-    if (!legend) return;  // Skip if legend element doesn't exist
-    
-    const legendItems = document.createElement('div');
-    legendItems.className = 'legend-items';
-    legend.appendChild(legendItems);
-    
-    planets.forEach(p => {
-      const item = document.createElement('div');
-      item.className = 'legend-item';
-      
-      // Create a canvas for each planet
-      const canvas = document.createElement('canvas');
-      canvas.width = 40;  // Larger canvas for better resolution
-      canvas.height = 40;
-      canvas.className = 'legend-planet';
-      const ctx = canvas.getContext('2d');
-      
-      // Draw the planet in the center of the canvas
-      drawMiniPlanet(ctx, p, canvas.width/2, canvas.height/2, 8);
-      
-      item.appendChild(canvas);
-      const label = document.createElement('span');
-      label.textContent = p.name;
-      item.appendChild(label);
-      legendItems.appendChild(item);
-    });
-  }
-
-  // Try to create legend, but won't break if element doesn't exist
-  createLegend();
-
-  const centerX = () => canvas.width / 2;
-  const centerY = () => canvas.height / 2;
-
-  let draggingPlanet = null;
-  let paused = false;
-
+  // Helper functions
   function degToRad(deg) {
     return deg * Math.PI / 180;
   }
@@ -169,123 +100,93 @@
     return Math.sqrt((a * Math.cos(rad))**2 + (b * Math.sin(rad))**2);
   }
 
-  function drawSun() {
+  // Canvas functions
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    
+    const minDimension = Math.min(canvas.width, canvas.height);
+    const scale = minDimension / 900; // Adjusted scale factor
+    
+    sun.radius = originalSizes.sun.radius * scale;
+    
+    planets.forEach((p, index) => {
+      const original = originalSizes.planets[index];
+      p.size = original.size * scale;
+      p.a = original.a * scale;
+    });
+  }
+
+  // Drawing functions
+  function drawPlanet(ctx, planet, x, y, size) {
     ctx.beginPath();
-    ctx.arc(centerX(), centerY(), sun.radius, 0, Math.PI * 2);
+    if (planet.name === 'Mars') {
+      const grad = ctx.createRadialGradient(x - size/3, y - size/3, size/5, x, y, size);
+      grad.addColorStop(0, '#ff6666');
+      grad.addColorStop(1, planet.color);
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = planet.color;
+    }
+    ctx.shadowColor = planet.color;
+    ctx.shadowBlur = 10;
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (planet.name === 'Saturn') {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(degToRad(20));
+      ctx.strokeStyle = 'rgba(210, 180, 140, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 1.8, size * 0.7, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    if (planet.name === 'Earth') {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = 'rgba(100, 150, 255, 0.7)';
+      ctx.shadowBlur = 5;
+      ctx.arc(x, y, size + 2, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  function animate(time = 0) {
+    const delta = (time - state.lastTime) / 1000;
+    state.lastTime = time;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Center the view
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    
+    // Draw orbits
+    planets.forEach(p => {
+      const b = semiMinorAxis(p.a, p.e);
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+      ctx.lineWidth = 1;
+      ctx.ellipse(0, 0, p.a, b, degToRad(p.orbitRotation), 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    // Draw sun
+    ctx.beginPath();
     ctx.fillStyle = sun.color;
     ctx.shadowColor = 'yellow';
     ctx.shadowBlur = 20;
+    ctx.arc(0, 0, sun.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
-  }
 
-  function drawOrbits() {
-    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-    ctx.lineWidth = 1;
-    planets.forEach(p => {
-      const b = semiMinorAxis(p.a, p.e);
-      ctx.save();
-      ctx.translate(centerX(), centerY());
-      ctx.rotate(degToRad(p.orbitRotation));
-      ctx.beginPath();
-      ctx.ellipse(0, 0, p.a, b, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-    });
-  }
-
-  function drawSaturnRing(x, y, size) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(degToRad(20));
-    ctx.strokeStyle = 'rgba(210, 180, 140, 0.6)';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, size * 1.8, size * 0.7, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawPlanets() {
-    planets.forEach(p => {
-      const b = semiMinorAxis(p.a, p.e);
-      const pos = pointOnRotatedEllipse(centerX(), centerY(), p.a, b, p.angle, p.orbitRotation);
-
-      ctx.beginPath();
-      if (p.name === 'Mars') {
-        const grad = ctx.createRadialGradient(pos.x - p.size/3, pos.y - p.size/3, p.size / 5, pos.x, pos.y, p.size);
-        grad.addColorStop(0, '#ff6666');
-        grad.addColorStop(1, p.color);
-        ctx.fillStyle = grad;
-      } else {
-        ctx.fillStyle = p.color;
-      }
-      ctx.shadowColor = p.color;
-      ctx.shadowBlur = 10;
-      ctx.arc(pos.x, pos.y, p.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      if (p.name === 'Earth') {
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)';
-        ctx.lineWidth = 3;
-        ctx.shadowColor = 'rgba(100, 150, 255, 0.7)';
-        ctx.shadowBlur = 10;
-        ctx.arc(pos.x, pos.y, p.size + 3, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      if (p.name === 'Saturn') {
-        drawSaturnRing(pos.x, pos.y, p.size);
-      }
-    });
-  }
-
-  function isPointOnPlanet(x, y, planet) {
-    const b = semiMinorAxis(planet.a, planet.e);
-    const pos = pointOnRotatedEllipse(centerX(), centerY(), planet.a, b, planet.angle, planet.orbitRotation);
-    const dx = x - pos.x;
-    const dy = y - pos.y;
-    return Math.sqrt(dx * dx + dy * dy) <= planet.size + 5;
-  }
-
-  function isPointOnSun(x, y) {
-    const dx = x - centerX();
-    const dy = y - centerY();
-    return Math.sqrt(dx * dx + dy * dy) <= sun.radius + 5;
-  }
-
-  // Show multiple facts at once in styled info box
-  function showInfoMultiple(facts, x, y, title) {
-    infoBox.style.display = 'block';
-    infoBox.style.left = `${x + 15}px`;
-    infoBox.style.top = `${y + 15}px`;
-    infoBox.style.padding = '12px 18px';
-    infoBox.style.background = 'rgba(30, 30, 30, 0.9)';
-    infoBox.style.borderRadius = '10px';
-    infoBox.style.boxShadow = '0 0 12px rgba(255,255,255,0.3)';
-    infoBox.innerHTML = `<strong>${title}</strong>` +
-      `<ul>` +
-      facts.map(fact => `<li>${fact}</li>`).join('') +
-      `</ul>`;
-  }
-
-  function hideInfo() {
-    infoBox.style.display = 'none';
-  }
-
-  let lastTime = 0;
-  function animate(time=0) {
-    const delta = (time - lastTime) / 1000;
-    lastTime = time;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawOrbits();
-    drawSun();
-
-    if (!paused && !draggingPlanet) {
+    // Update and draw planets
+    if (!state.paused && !state.draggingPlanet) {
       planets.forEach(p => {
         const b = semiMinorAxis(p.a, p.e);
         const dist = distanceOnRotatedEllipse(p.a, b, p.angle);
@@ -293,19 +194,49 @@
         p.angle = (p.angle + p.baseSpeed * speedMod * delta * 60) % 360;
       });
     }
-    drawPlanets();
 
+    planets.forEach(p => {
+      const b = semiMinorAxis(p.a, p.e);
+      const pos = pointOnRotatedEllipse(0, 0, p.a, b, p.angle, p.orbitRotation);
+      drawPlanet(ctx, p, pos.x, pos.y, p.size);
+    });
+
+    ctx.restore();
     requestAnimationFrame(animate);
   }
 
-  let isDragging = false;
-  let dragStartAngle = 0;
-  let dragStartMouseAngle = 0;
+  // Info display
+  function showInfo(facts, x, y, title) {
+    const infoBox = document.getElementById('infoBox');
+    infoBox.style.display = 'block';
+    infoBox.style.left = `${x + 15}px`;
+    infoBox.style.top = `${y + 15}px`;
+    infoBox.innerHTML = `<strong>${title}</strong><ul>${facts.map(fact => `<li>${fact}</li>`).join('')}</ul>`;
+  }
+
+  function hideInfo() {
+    const infoBox = document.getElementById('infoBox');
+    infoBox.style.display = 'none';
+  }
+
+  // Interaction
+  function isPointOnPlanet(x, y, planet) {
+    const b = semiMinorAxis(planet.a, planet.e);
+    const pos = pointOnRotatedEllipse(canvas.width/2, canvas.height/2, planet.a, b, planet.angle, planet.orbitRotation);
+    const dx = x - pos.x;
+    const dy = y - pos.y;
+    return Math.sqrt(dx * dx + dy * dy) <= planet.size + 5;
+  }
+
+  function isPointOnSun(x, y) {
+    const dx = x - canvas.width/2;
+    const dy = y - canvas.height/2;
+    return Math.sqrt(dx * dx + dy * dy) <= sun.radius + 5;
+  }
 
   function getAngleOnRotatedEllipseFromPoint(x, y, rotation) {
-    const cx = centerX();
-    const cy = centerY();
-
+    const cx = canvas.width/2;
+    const cy = canvas.height/2;
     const radRot = degToRad(-rotation);
     const dx = x - cx;
     const dy = y - cy;
@@ -314,85 +245,151 @@
     return radToDeg(Math.atan2(yr, xr));
   }
 
-  function onPointerDown(e) {
-    e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  // Event handlers
+  const handlers = {
+    dragStartTime: 0,
+    
+    onClick(e) {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-    for (const p of planets) {
-      if (isPointOnPlanet(x, y, p)) {
-        draggingPlanet = p;
-        isDragging = true;
-        dragStartAngle = p.angle;
-        dragStartMouseAngle = getAngleOnRotatedEllipseFromPoint(x, y, p.orbitRotation);
-        hideInfo();
+      for (const p of planets) {
+        if (isPointOnPlanet(x, y, p)) {
+          showInfo(p.facts, e.clientX, e.clientY, p.name);
+          return;
+        }
+      }
+      if (isPointOnSun(x, y)) {
+        showInfo(sun.facts, e.clientX, e.clientY, sun.name);
         return;
       }
-    }
-    if (isPointOnSun(x, y)) {
-      showInfoMultiple(sun.facts, x, y, sun.name);
-      return;
-    }
-    hideInfo();
-  }
-
-  function onPointerMove(e) {
-    if (!isDragging || !draggingPlanet) return;
-    e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const currentMouseAngle = getAngleOnRotatedEllipseFromPoint(x, y, draggingPlanet.orbitRotation);
-    let deltaAngle = currentMouseAngle - dragStartMouseAngle;
-
-    if (deltaAngle > 180) deltaAngle -= 360;
-    else if (deltaAngle < -180) deltaAngle += 360;
-
-    draggingPlanet.angle = (dragStartAngle + deltaAngle + 360) % 360;
-    showInfoMultiple(draggingPlanet.facts, x, y, draggingPlanet.name);
-  }
-
-  function onPointerUp(e) {
-    if (isDragging) {
-      isDragging = false;
-      draggingPlanet = null;
       hideInfo();
-    }
-  }
+    },
 
-  // Show all facts at once on click
-  function onClick(e) {
-    e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    onPointerDown(e) {
+      e.preventDefault();
+      handlers.dragStartTime = Date.now();
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-    for (const p of planets) {
-      if (isPointOnPlanet(x, y, p)) {
-        showInfoMultiple(p.facts, x, y, p.name);
-        return;
+      for (const p of planets) {
+        if (isPointOnPlanet(x, y, p)) {
+          state.draggingPlanet = p;
+          state.isDragging = true;
+          state.dragStartAngle = p.angle;
+          state.dragStartMouseAngle = getAngleOnRotatedEllipseFromPoint(x, y, p.orbitRotation);
+          return;
+        }
+      }
+    },
+
+    onPointerMove(e) {
+      if (!state.isDragging || !state.draggingPlanet) return;
+      e.preventDefault();
+      
+      // Only start actual dragging after a small delay or movement
+      if (Date.now() - handlers.dragStartTime < 100) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const currentMouseAngle = getAngleOnRotatedEllipseFromPoint(x, y, state.draggingPlanet.orbitRotation);
+      let deltaAngle = currentMouseAngle - state.dragStartMouseAngle;
+
+      if (deltaAngle > 180) deltaAngle -= 360;
+      else if (deltaAngle < -180) deltaAngle += 360;
+
+      state.draggingPlanet.angle = (state.dragStartAngle + deltaAngle + 360) % 360;
+    },
+
+    onPointerUp(e) {
+      if (state.isDragging) {
+        // If this was a quick tap, treat it as a click
+        if (Date.now() - handlers.dragStartTime < 100) {
+          handlers.onClick(e);
+        }
+        state.isDragging = false;
+        state.draggingPlanet = null;
+        hideInfo();
       }
     }
-    if (isPointOnSun(x, y)) {
-      showInfoMultiple(sun.facts, x, y, sun.name);
-      return;
-    }
-    hideInfo();
+  };
+
+  // Create legend
+  function createLegend() {
+    const legend = document.getElementById('legend');
+    if (!legend) return;
+    
+    const legendItems = document.createElement('div');
+    legendItems.className = 'legend-items';
+    legend.appendChild(legendItems);
+
+    // Add Sun to legend
+    const sunItem = document.createElement('div');
+    sunItem.className = 'legend-item';
+    
+    const sunCanvas = document.createElement('canvas');
+    sunCanvas.width = 40;
+    sunCanvas.height = 40;
+    sunCanvas.className = 'legend-planet';
+    const sunCtx = sunCanvas.getContext('2d');
+    
+    sunCtx.translate(sunCanvas.width/2, sunCanvas.height/2);
+    sunCtx.fillStyle = 'yellow';
+    sunCtx.beginPath();
+    sunCtx.arc(0, 0, 12, 0, Math.PI * 2);
+    sunCtx.fill();
+    
+    sunItem.appendChild(sunCanvas);
+    const sunLabel = document.createElement('span');
+    sunLabel.textContent = sun.name;
+    sunItem.appendChild(sunLabel);
+    legendItems.appendChild(sunItem);
+    
+    planets.forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = 40;
+      canvas.height = 40;
+      canvas.className = 'legend-planet';
+      const ctx = canvas.getContext('2d');
+      
+      ctx.translate(canvas.width/2, canvas.height/2);
+      drawPlanet(ctx, p, 0, 0, 8);
+      
+      item.appendChild(canvas);
+      const label = document.createElement('span');
+      label.textContent = p.name;
+      item.appendChild(label);
+      legendItems.appendChild(item);
+    });
   }
 
-  // Pause/play button toggle
+  // Event listeners
+  canvas.addEventListener('pointerdown', handlers.onPointerDown.bind(handlers));
+  canvas.addEventListener('pointermove', handlers.onPointerMove.bind(handlers));
+  canvas.addEventListener('pointerup', handlers.onPointerUp.bind(handlers));
+  canvas.addEventListener('pointerleave', handlers.onPointerUp.bind(handlers));
+  canvas.addEventListener('click', handlers.onClick.bind(handlers));
+
   pauseBtn.addEventListener('click', () => {
-    paused = !paused;
-    pauseBtn.textContent = paused ? 'Play' : 'Pause';
+    state.paused = !state.paused;
+    pauseBtn.textContent = state.paused ? 'Play' : 'Pause';
   });
 
-  canvas.addEventListener('pointerdown', onPointerDown);
-  canvas.addEventListener('pointermove', onPointerMove);
-  canvas.addEventListener('pointerup', onPointerUp);
-  canvas.addEventListener('pointerleave', onPointerUp);
-  canvas.addEventListener('click', onClick);
+  window.addEventListener('resize', resize);
 
-  animate();
+  // Initialize
+  window.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing...');
+    createLegend();
+    resize();
+    requestAnimationFrame(animate);
+  });
 })();
