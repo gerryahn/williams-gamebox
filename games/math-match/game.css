@@ -11,3 +11,38 @@
 .tile.wrong { background: #ef4444; }
 .hud { display: flex; gap: 14px; align-items: center; }
 .howto { color: var(--muted); }
+
+
+.howto {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.howto h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.howto p, .howto ul {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.howto ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.kbd {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+}

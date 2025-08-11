@@ -1,0 +1,90 @@
+body {
+  margin: 0;
+  background: #000;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  display: flex;
+  height: 100vh;
+}
+#container {
+  flex: 1;
+  position: relative;
+}
+canvas {
+  display: block;
+  background: radial-gradient(circle at center, #111 40%, #000 100%);
+  width: 100%;
+  height: 100%;
+}
+#infoBox {
+  position: absolute;
+  background: rgba(30, 30, 30, 0.9);
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(255,255,255,0.3);
+  max-width: 280px;
+  pointer-events: none;
+  color: #ddd;
+  font-size: 14px;
+  display: none;
+  user-select: none;
+  z-index: 10;
+}
+#infoBox strong {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 8px;
+  color: #fff;
+}
+#infoBox ul {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.4;
+}
+#legend {
+  width: 220px;
+  background: #111;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  border-left: 2px solid #333;
+  overflow-y: auto;
+}
+#legend h2 {
+  margin-top: 0;
+  font-weight: 700;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: 0 0 8px 1px currentColor;
+}
+#controls {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 20;
+}
+#pauseBtn {
+  background: #222;
+  border: 1px solid #666;
+  color: #eee;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s;
+}
+#pauseBtn:hover {
+  background: #444;
+}
