@@ -154,20 +154,36 @@ function speakNumber(num) {
   }
 }
 
-canvas.addEventListener('click', e => {
+function handleCanvasInput(clientX, clientY) {
   if (!gameRunning) return;
   const rect = canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-  const dx = mouseX - cannon.x;
-  const dy = mouseY - cannon.y;
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  
+  const inputX = (clientX - rect.left) * scaleX;
+  const inputY = (clientY - rect.top) * scaleY;
+  
+  const dx = inputX - cannon.x;
+  const dy = inputY - cannon.y;
   cannon.angle = Math.atan2(dy, dx);
+  
   projectiles.push({
     x: cannon.x,
     y: cannon.y,
     dx: Math.cos(cannon.angle) * 7,
     dy: Math.sin(cannon.angle) * 7
   });
+}
+
+canvas.addEventListener('click', e => {
+  e.preventDefault();
+  handleCanvasInput(e.clientX, e.clientY);
+});
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  handleCanvasInput(touch.clientX, touch.clientY);
 });
 
 function update() {
