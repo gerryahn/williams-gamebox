@@ -212,8 +212,6 @@
   function showInfo(facts, x, y, title) {
     const infoBox = document.getElementById('infoBox');
     infoBox.style.display = 'block';
-    infoBox.style.left = `${x + 15}px`;
-    infoBox.style.top = `${y + 15}px`;
     infoBox.innerHTML = `<strong>${title}</strong><ul>${facts.map(fact => `<li>${fact}</li>`).join('')}</ul>`;
   }
 
