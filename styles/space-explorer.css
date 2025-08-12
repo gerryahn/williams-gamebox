@@ -26,21 +26,45 @@
   touch-action: none; /* Prevents default touch behaviors */
   display: block;
 }
+.game-controls-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.controls-guide {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.game-controls {
+  margin-left: auto;
+  padding-right: 2rem;
+}
+
 #infoBox {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: rgba(20, 20, 40, 0.95);
   padding: 15px 20px;
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(100, 200, 255, 0.4);
-  max-width: 300px;
+  max-width: min(300px, 80vw);
+  width: max-content;
   pointer-events: none;
   color: #fff;
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
   display: none;
   user-select: none;
   z-index: 10;
   font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
   border: 2px solid rgba(100, 200, 255, 0.3);
+  animation: fadeIn 0.3s ease-out;
 }
 
 #infoBox strong {
@@ -93,6 +117,17 @@
   gap: 0.5rem;
   max-width: 960px;
   margin: 0 auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .legend-item {

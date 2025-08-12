@@ -12,7 +12,10 @@
     paused: false,
     isDragging: false,
     dragStartAngle: 0,
-    dragStartMouseAngle: 0
+    dragStartMouseAngle: 0,
+    lastTapTime: 0,
+    lastTouchX: 0,
+    lastTouchY: 0
   };
 
   // Define initial object properties
@@ -248,21 +251,39 @@
   // Event handlers
   const handlers = {
     dragStartTime: 0,
+
+    // Helper function to handle both mouse and touch coordinates
+    getEventCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const coords = e.touches ? e.touches[0] : e;
+      return {
+        x: coords.clientX - rect.left,
+        y: coords.clientY - rect.top,
+        clientX: coords.clientX,
+        clientY: coords.clientY
+      };
+    },
     
     onClick(e) {
       e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const coords = handlers.getEventCoords(e);
+      const { x, y, clientX, clientY } = coords;
+
+      // Check for double-tap on touch devices
+      const now = Date.now();
+      if (e.touches && now - state.lastTapTime < 300) {
+        return; // Prevent double-tap zoom
+      }
+      state.lastTapTime = now;
 
       for (const p of planets) {
         if (isPointOnPlanet(x, y, p)) {
-          showInfo(p.facts, e.clientX, e.clientY, p.name);
+          showInfo(p.facts, clientX, clientY, p.name);
           return;
         }
       }
       if (isPointOnSun(x, y)) {
-        showInfo(sun.facts, e.clientX, e.clientY, sun.name);
+        showInfo(sun.facts, clientX, clientY, sun.name);
         return;
       }
       hideInfo();
@@ -271,9 +292,14 @@
     onPointerDown(e) {
       e.preventDefault();
       handlers.dragStartTime = Date.now();
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const coords = handlers.getEventCoords(e);
+      const { x, y } = coords;
+
+      // Store touch coordinates for distance calculation
+      if (e.touches) {
+        state.lastTouchX = x;
+        state.lastTouchY = y;
+      }
 
       for (const p of planets) {
         if (isPointOnPlanet(x, y, p)) {
@@ -292,10 +318,9 @@
       
       // Only start actual dragging after a small delay or movement
       if (Date.now() - handlers.dragStartTime < 100) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+
+      const coords = handlers.getEventCoords(e);
+      const { x, y } = coords;
 
       const currentMouseAngle = getAngleOnRotatedEllipseFromPoint(x, y, state.draggingPlanet.orbitRotation);
       let deltaAngle = currentMouseAngle - state.dragStartMouseAngle;
