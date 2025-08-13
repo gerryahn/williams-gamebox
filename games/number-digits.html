@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digits Place Value Game — William's Gamebox</title>
+  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="../styles/number-digits.css" />
+</head>
+<body>
+  <div id="header"></div>
+
+  <main class="game-wrap">
+    <div class="game-header">
+      <h1>Number Digits</h1>
+      <div class="hud">
+        <div id="scoreboard">Score: <span id="score">0</span> | Lives: <span id="lives">3</span> | Highest Score: <span id="high-score">0</span></div>
+        <div class="game-controls">
+          <button id="start-btn" class="btn btn-primary">Start Game</button>
+          <button id="submit-btn" class="btn btn-primary" disabled>Submit</button>
+          <button id="repeat-btn" class="btn btn-secondary" style="display: none;" title="Click to hear the number again">
+            <span class="btn-icon">🔊</span>
+            <span class="btn-text">Repeat Number</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="howto">
+      <h2>How to Play</h2>
+      <p>Listen to the number, then drag the correct digits into the Hundreds, Tens, and Ones boxes. You have 3 lives. Try to get the highest score!</p>
+    </section>
+
+    <!-- Ad placeholder above the game -->
+    <section class="ad" aria-label="Advertisement">
+      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
+    </section>
+
+    <div id="gameContainer" class="game-board">
+      <section class="placeholders">
+        <div class="placeholder" data-place="hundreds">Hundreds</div>
+        <div class="placeholder" data-place="tens">Tens</div>
+        <div class="placeholder" data-place="ones">Ones</div>
+      </section>
+
+      <section class="cards">
+        <!-- Number cards 0–9 -->
+        <div class="card" draggable="true">0</div>
+        <div class="card" draggable="true">1</div>
+        <div class="card" draggable="true">2</div>
+        <div class="card" draggable="true">3</div>
+        <div class="card" draggable="true">4</div>
+        <div class="card" draggable="true">5</div>
+        <div class="card" draggable="true">6</div>
+        <div class="card" draggable="true">7</div>
+        <div class="card" draggable="true">8</div>
+        <div class="card" draggable="true">9</div>
+      </section>
+    </div>
+
+    <!-- Ad placeholder below the game -->
+    <section class="ad" aria-label="Advertisement">
+      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
+    </section>
+  </main>
+
+  <div id="game-over-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Game Over!</h2>
+      <p>Your score: <span id="final-score"></span></p>
+      <button id="restart-btn">Play Again</button>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+  <script src="../scripts/number-digits.js" defer></script>
+  <script>
+    fetch('../header.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('header').innerHTML = data);
+    fetch('../footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer').innerHTML = data);
+  </script>
+</body>
+</html>
