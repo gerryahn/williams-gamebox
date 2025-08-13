@@ -496,6 +496,26 @@ body {
   text-decoration: underline;
 }
 
+/* Ad Units */
+.ad-container {
+  width: 100%;
+  min-height: 90px;
+  margin: var(--space-lg) auto;
+  text-align: center;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.adsbygoogle {
+  display: block;
+  min-width: 250px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* Game Specific Overrides */
 .intro-content h1 {
   font-size: 2.5rem;
