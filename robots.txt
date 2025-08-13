@@ -1,2 +1,8 @@
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://williamsgamebox.com/sitemap.xml
+
+# Crawl-delay to be nice to search engines
+Crawl-delay: 10
