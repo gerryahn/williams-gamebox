@@ -1,6 +1,19 @@
 let score = 0;
 let lives = 3;
-let highScore = localStorage.getItem("digitsHighScore") || 0;
+let highScore = lfunction startGame() {
+  // Hide the intro overlay
+  document.getElementById('game-intro').style.display = 'none';
+  
+  score = 0;
+  lives = 3;
+  scoreEl.textContent = score;
+  livesEl.textContent = lives;
+  // Show and enable the Check Answer button
+  submitBtn.style.display = "inline-block";
+  submitBtn.disabled = false;
+  // Show the Repeat Number button
+  repeatBtn.style.display = "inline-flex";
+  nextRound();age.getItem("digitsHighScore") || 0;
 let currentNumber = 0;
 
 const scoreEl = document.getElementById("score");
@@ -119,7 +132,10 @@ function checkAnswer() {
 }
 
 function gameOver() {
+  // Hide and disable the Check Answer button
+  submitBtn.style.display = "none";
   submitBtn.disabled = true;
+  // Hide the Repeat Number button
   repeatBtn.style.display = "none";
   finalScoreEl.textContent = score;
   modal.classList.remove("hidden");
