@@ -1,3 +1,9 @@
+/* Number Pop specific overrides */
+
+.step-icon {
+  font-size: 1.5rem;
+}
+
 /* Game specific styles for Number Pop */
 .game-board {
   margin: 12px 0 10px;
@@ -60,52 +66,11 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.game-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
-}
-
 .hud {
   display: flex;
   gap: var(--space-md);
   align-items: center;
   flex-wrap: wrap;
-}
-
-#scoreboard {
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-/* Button styles */
-.btn {
-  padding: var(--space-sm) var(--space-md);
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
-.btn-primary {
-  background: var(--accent-primary);
-  color: white;
-}
-
-.btn-secondary {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.btn:hover {
-  transform: translateY(-1px);
 }
 
 .btn-icon {
@@ -116,19 +81,26 @@
 .game-over {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0, 0, 0, 0.85);
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
-  text-align: center;
   z-index: 1000;
+  backdrop-filter: blur(5px);
+  gap: 1.5rem;
 }
 
 .game-over #gameOverText {
-  font-size: 2rem;
-  margin-bottom: var(--space-lg);
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--text-1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.5s ease-out;
+  white-space: pre-line;
 }
 
 /* Responsive adjustments */

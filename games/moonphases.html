@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moon Phases Explorer - Space Games for Kids</title>
     <meta name="description" content="Learn about moon phases in this interactive 3D space simulation. Perfect for kids to understand how the moon changes as it orbits Earth!">
-    <link rel="stylesheet" href="/styles/style.css">
+    <script src="../scripts/head-loader.js"></script>
     <link rel="stylesheet" href="/styles/moon-phases.css">
     <script type="importmap">
     {
@@ -19,7 +19,10 @@
 </head>
 <body>
     <!-- Include site header -->
-    <div w3-include-html="/header.html"></div>
+    <div id="header"></div>
+
+    <!-- Ad placeholder above the game -->
+    <section class="ad" aria-label="Advertisement"></section>
 
     <main class="container">
         <h1>Moon Phases Explorer</h1>

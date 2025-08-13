@@ -10,9 +10,7 @@
 
   <main class="game-wrap">
     <!-- Ad placeholder above the game -->
-    <section class="ad" aria-label="Advertisement">
-      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
-    </section>
+    <section class="ad" aria-label="Advertisement"></section>
 
     <div id="game-intro" class="game-intro-overlay">
       <div class="intro-content">
@@ -35,7 +33,7 @@
             </div>
             <div class="step">
               <span class="step-icon">🔊</span>
-              <p>Use Repeat Number if you need to hear it again</p>
+              <p>Click Listen Again if you need to hear the number another time</p>
             </div>
           </div>
           <button id="start-btn" class="btn btn-primary btn-large">Start Game</button>
@@ -49,10 +47,13 @@
     </div>
 
     <div class="game-controls">
-      <button id="submit-btn" class="btn btn-primary" style="display: none;" disabled>Check Answer</button>
+      <button id="submit-btn" class="btn btn-primary" style="display: none;" disabled>
+        <span class="btn-icon">✓</span>
+        <span class="btn-text">Check Answer</span>
+      </button>
       <button id="repeat-btn" class="btn btn-secondary" style="display: none;" title="Click to hear the number again">
         <span class="btn-icon">🔊</span>
-        <span class="btn-text">Repeat Number</span>
+        <span class="btn-text">Listen Again</span>
       </button>
     </div>
 
@@ -80,9 +81,7 @@
     </div>
 
     <!-- Ad placeholder below the game -->
-    <section class="ad" aria-label="Advertisement">
-      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
-    </section>
+    <section class="ad" aria-label="Advertisement"></section>
 
     <section class="howto">
       <h2>How to Play</h2>

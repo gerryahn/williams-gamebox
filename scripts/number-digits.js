@@ -1,21 +1,10 @@
+// Initialize game state
 let score = 0;
 let lives = 3;
-let highScore = lfunction startGame() {
-  // Hide the intro overlay
-  document.getElementById('game-intro').style.display = 'none';
-  
-  score = 0;
-  lives = 3;
-  scoreEl.textContent = score;
-  livesEl.textContent = lives;
-  // Show and enable the Check Answer button
-  submitBtn.style.display = "inline-block";
-  submitBtn.disabled = false;
-  // Show the Repeat Number button
-  repeatBtn.style.display = "inline-flex";
-  nextRound();age.getItem("digitsHighScore") || 0;
+let highScore = localStorage.getItem("digitsHighScore") || 0;
 let currentNumber = 0;
 
+// Initialize DOM elements
 const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const highScoreEl = document.getElementById("high-score");
@@ -25,9 +14,11 @@ const repeatBtn = document.getElementById("repeat-btn");
 const placeholders = document.querySelectorAll(".placeholder");
 const cards = document.querySelectorAll(".card");
 const modal = document.getElementById("game-over-modal");
-const finalScoreEl = document.getElementById("final-score");
+const finalScoreEl  = document.getElementById("final-score");
 const restartBtn = document.getElementById("restart-btn");
+const gameIntroOverlay = document.getElementById("game-intro");
 
+// Set initial high score
 highScoreEl.textContent = highScore;
 
 // Drag and drop setup
@@ -59,12 +50,23 @@ function speakNumber(num) {
 }
 
 function startGame() {
+  // Hide the intro overlay
+  gameIntroOverlay.classList.add('hidden');
+  
+  // Reset game state
   score = 0;
   lives = 3;
   scoreEl.textContent = score;
   livesEl.textContent = lives;
+  
+  // Show and enable the Check Answer button
+  submitBtn.style.display = "inline-block";
   submitBtn.disabled = false;
-  repeatBtn.style.display = 'inline-flex';
+  
+  // Show the Repeat Number button
+  repeatBtn.style.display = "inline-flex";
+  
+  // Start first round
   nextRound();
 }
 
@@ -78,6 +80,9 @@ function nextRound() {
   });
   currentNumber = Math.floor(Math.random() * 900) + 100; // Ensure 3 digits (100-999)
   speakNumber(currentNumber);
+  
+  // Enable submit button for the new round
+  submitBtn.disabled = false;
 }
 
 function checkAnswer() {
@@ -110,24 +115,25 @@ function checkAnswer() {
     }
 
     const correctDigits = currentNumber.toString().padStart(3, '0');
-    let hasError = false;
-
+    
     // Check each digit and mark incorrect ones
-    if (hundreds !== parseInt(correctDigits[0])) {
-      hundredsEl.classList.remove('has-number');
-      hundredsEl.classList.add('incorrect');
-      hasError = true;
-    }
-    if (tens !== parseInt(correctDigits[1])) {
-      tensEl.classList.remove('has-number');
-      tensEl.classList.add('incorrect');
-      hasError = true;
-    }
-    if (ones !== parseInt(correctDigits[2])) {
-      onesEl.classList.remove('has-number');
-      onesEl.classList.add('incorrect');
-      hasError = true;
-    }
+    [
+      { el: hundredsEl, value: hundreds, correct: parseInt(correctDigits[0]) },
+      { el: tensEl, value: tens, correct: parseInt(correctDigits[1]) },
+      { el: onesEl, value: ones, correct: parseInt(correctDigits[2]) }
+    ].forEach(({ el, value, correct }) => {
+      if (value !== correct) {
+        el.classList.remove('has-number');
+        el.classList.add('incorrect');
+        // Reset animation
+        el.style.animation = 'none';
+        el.offsetHeight; // Trigger reflow
+        el.style.animation = null;
+      } else {
+        el.classList.add('has-number');
+        el.classList.remove('incorrect');
+      }
+    });
   }
 }
 
@@ -141,10 +147,11 @@ function gameOver() {
   modal.classList.remove("hidden");
 }
 
+// Event Listeners
 startBtn.addEventListener("click", () => {
   startGame();
   modal.classList.add("hidden");
-  startBtn.style.display = "none";
+  // No need to hide start button as it's in the overlay
   submitBtn.style.display = "inline-block";
   repeatBtn.style.display = "inline-flex";
 });

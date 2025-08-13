@@ -1,35 +1,61 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Number Pop — William's Gamebox</title>
-  <link rel="stylesheet" href="../styles/style.css" />
-  <link rel="stylesheet" href="../styles/number-pop.css" />
+  <script src="../scripts/head-loader.js"></script>
+  <link rel="stylesheet" href="../styles/number-pop.css" importance="high" />
 </head>
 <body>
   <div id="header"></div>
 
   <main class="game-wrap">
-    <div class="game-header">
-      <h1>Number Pop</h1>
-      <div class="hud">
-        <div id="scoreboard">Score: 0 | Lives: 3 | Highest Score: 0</div>
-        <div class="game-controls">
-          <button id="startButton" class="btn btn-primary">Start Game</button>
-          <button id="hearNumberBtn" class="btn btn-secondary" title="Click to hear the number again">
-            <span class="btn-icon">🔊</span>
-            <span class="btn-text">Repeat Number</span>
-          </button>
-          <button id="configToggle" class="btn btn-secondary">⚙️ Game Settings</button>
+    <!-- Ad placeholder above the game -->
+    <section class="ad" aria-label="Advertisement"></section>
+
+    <div id="game-intro" class="game-intro-overlay">
+      <div class="intro-content">
+        <h1>Bubble Pop</h1>
+        <div class="intro-instructions">
+          <h2>How to Play</h2>
+          <p>Pop the correct number bubbles in this fun shooting game! 🎯</p>
+          <div class="instruction-steps">
+            <div class="step">
+              <span class="step-icon">👂</span>
+              <p>Listen carefully to the spoken number</p>
+            </div>
+            <div class="step">
+              <span class="step-icon">🎯</span>
+              <p>Click or tap to aim and shoot at the correct bubble</p>
+            </div>
+            <div class="step">
+              <span class="step-icon">⭐</span>
+              <p>Hit the right number to score points</p>
+            </div>
+            <div class="step">
+              <span class="step-icon">🔊</span>
+              <p>Click Listen Again if you need to hear the number another time</p>
+            </div>
+          </div>
+          <button id="start-btn" class="btn btn-primary btn-large">Start Game</button>
         </div>
       </div>
     </div>
 
-    <!-- Ad placeholder above the game -->
-    <section class="ad" aria-label="Advertisement">
-      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
-    </section>
+    <div class="game-header">
+      <h1>Bubble Pop</h1>
+        <div id="scoreboard">Score: 0 | Lives: 3 | Highest Score: 0</div>
+    </div>
+    <div class="game-controls">
+      <button id="hearNumberBtn" class="btn btn-secondary" title="Click to hear the number again">
+        <span class="btn-icon">🔊</span>
+        <span class="btn-text">Listen Again</span>
+      </button>
+      <button id="configToggle" class="btn btn-secondary" title="Adjust game settings">
+        <span class="btn-icon">⚙️</span>
+        <span class="btn-text">Game Settings</span>
+      </button>
+    </div>
+    </div>
 
     <div id="configPanel" class="config-panel">
       <h3>Game Settings</h3>
@@ -49,18 +75,25 @@
     </div>
 
     <!-- Ad placeholder below the game -->
-    <section class="ad" aria-label="Advertisement">
-      <!-- Insert ad code here (see ../ads/adsense-placeholder.html). -->
-    </section>
+    <section class="ad" aria-label="Advertisement"></section>
 
     <section class="howto">
       <h2>How to Play</h2>
       <p>Click or tap to aim and shoot at the correct number bubble. Listen carefully to the spoken number!</p>
-      <ul>
-        <li><span class="kbd">Click</span> or tap to aim and shoot</li>
-        <li>Correct hit = +1 point · Wrong hit = −1 life</li>
-        <li>Use <span class="kbd">🔊</span> to hear the number again</li>
-      </ul>
+      <div class="howto-details">
+        <div class="howto-item">
+          <span class="icon">🎯</span>
+          <span>Click or tap to aim and shoot</span>
+        </div>
+        <div class="howto-item">
+          <span class="icon">⭐</span>
+          <span>Correct hit = +1 point · Wrong hit = −1 life</span>
+        </div>
+        <div class="howto-item">
+          <span class="icon">🔊</span>
+          <span>Use Listen Again to hear the number</span>
+        </div>
+      </div>
     </section>
 
     <div id="gameOverOverlay" class="game-over">
@@ -72,7 +105,7 @@
     <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const startButton = document.getElementById('startButton');
+const startButton = document.getElementById('start-btn');
 const scoreboard = document.getElementById('scoreboard');
 const configToggle = document.getElementById('configToggle');
 const configPanel = document.getElementById('configPanel');
@@ -299,8 +332,12 @@ function startGame() {
   lives = 3;
   projectiles = [];
   gameRunning = true;
+  
+  // Hide intro overlay and start button
+  document.getElementById('game-intro').classList.add('hidden');
   startButton.style.display = 'none';
   gameOverOverlay.style.display = 'none';
+  
   newRound();
   gameLoop();
 }
@@ -338,10 +375,6 @@ resetGame();
     fetch('../footer.html')
       .then(response => response.text())
       .then(data => document.getElementById('footer').innerHTML = data);
-    window.addEventListener('DOMContentLoaded', function() {
-      var yearSpan = document.getElementById('year');
-      if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-    });
   </script>
 </body>
 </html>

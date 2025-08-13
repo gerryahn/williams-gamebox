@@ -1,8 +1,9 @@
+// Define base URL at the top level
+const baseUrl = window.location.pathname.includes('/games/') ? '..' : '.';
+
 // Function to load head content
 async function loadHeadContent() {
   try {
-    // Get the base URL (for proper path resolution)
-    const baseUrl = window.location.pathname.includes('/games/') ? '..' : '.';
     
     // Store any existing page-specific stylesheets
     const pageStyles = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(link => {
@@ -50,7 +51,17 @@ async function loadHeadContent() {
 
 // Load head content when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadHeadContent);
+  document.addEventListener('DOMContentLoaded', () => {
+    loadHeadContent();
+    // Load ad-loader script
+    const adScript = document.createElement('script');
+    adScript.src = `${baseUrl}/scripts/ad-loader.js`;
+    document.head.appendChild(adScript);
+  });
 } else {
   loadHeadContent();
+  // Load ad-loader script
+  const adScript = document.createElement('script');
+  adScript.src = `${baseUrl}/scripts/ad-loader.js`;
+  document.head.appendChild(adScript);
 }
