@@ -445,18 +445,6 @@ body {
   margin: 1rem 0;
 }
 
-/* Ads */
-.ad {
-  background: var(--neutral);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
-  margin: var(--space-lg) 0;
-  text-align: center;
-  min-height: 90px;
-  display: grid;
-  place-items: center;
-}
-
 /* Buttons */
 .btn {
   background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
